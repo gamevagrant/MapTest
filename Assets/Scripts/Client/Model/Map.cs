@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Map {
 
-    private Rect displayRange;
-    private Vector2 itemSize;
+    public Vector2Int preloadRange;//预加载区域
+    private Rect displayRange;//显示区域
+    private Vector2 itemSize;//地图块的大小
     private Dictionary<Vector2Int, IMapItem> displayItems;//显示列表
     private Dictionary<Vector2Int, IMapItem> addDisplayItems;//新增加元素的列表
     private Dictionary<Vector2Int, IMapItem> removeDisplayItems;//需要移除的元素的列表
@@ -13,14 +14,16 @@ public class Map {
     private MapItemFactory factory;
     
 
-    public Map(Rect displayRange,Vector2 itemSize)
+    public Map()
     {
-        this.displayRange = displayRange;
-        this.itemSize = itemSize;
+        this.preloadRange = MapSettings.preloadRange;
+        this.displayRange = new Rect(Vector2.zero,MapSettings.dispaySize) ;
+        this.itemSize = MapSettings.itemSize;
         factory = new MapItemFactory();
         displayItems = new Dictionary<Vector2Int, IMapItem>();
     }
 
+//移动视口位置
     public void Move(Vector2 target)
     {
         removeDisplayItems = new Dictionary<Vector2Int, IMapItem>(displayItems);
@@ -31,6 +34,7 @@ public class Map {
 
         Vector2Int index = numRect.min;
         string log = "";
+        //筛选出当前帧和上一帧对比不需要显示和新增需要显示的地图块
         while(index.x<=numRect.max.x && index.y<=numRect.max.y)
         {
             AddDisplayList(index);
@@ -48,12 +52,12 @@ public class Map {
     }
 
     
-    //得到显示区域内地图索引的范围
+    //获取当前需要显示的地图块的范围
     private RectInt GetNumRect()
     {
         RectInt rect = new RectInt();
-        rect.min = new Vector2Int(Mathf.FloorToInt(displayRange.min.x/itemSize.x), Mathf.FloorToInt(displayRange.min.y / itemSize.y));
-        rect.max = new Vector2Int(Mathf.FloorToInt(displayRange.max.x / itemSize.x), Mathf.FloorToInt(displayRange.max.y / itemSize.y));
+        rect.min = new Vector2Int(Mathf.FloorToInt(displayRange.min.x/itemSize.x), Mathf.FloorToInt(displayRange.min.y / itemSize.y)) - preloadRange;
+        rect.max = new Vector2Int(Mathf.FloorToInt(displayRange.max.x / itemSize.x), Mathf.FloorToInt(displayRange.max.y / itemSize.y)) + preloadRange;
         return rect;
     }
 

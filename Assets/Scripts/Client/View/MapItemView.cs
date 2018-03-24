@@ -13,11 +13,19 @@ public class MapItemView : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
 		if(item!=null && item.Data!=null && item.Data.data.ToString()!=text.text)
         {
-            text.text = item.Data.data.ToString();
-            text.text = item.Data.Id;
+            if(!item.Data.isNull)
+            {
+                text.text = item.Data.data.ToString();
+            }else
+            {
+                text.text = "null";
+            }
+            
+            
         }
 	}
 
@@ -30,6 +38,6 @@ public class MapItemView : MonoBehaviour {
 
         (transform as RectTransform).sizeDelta = size;
         (transform as RectTransform).anchoredPosition = new Vector2(index.x * size.x + size.x/2,-index.y * size.y - size.y/2);
-
+        text.text = item.Index.x.ToString()+"_"+item.Index.y.ToString();
     }
 }

@@ -12,7 +12,7 @@ public class MapView : MonoBehaviour {
     // Use this for initialization
     private void Awake()
     {
-        EventDispatcher.instance.AddEventListener("UpdateMap", OnUpdateMapHandle);
+        EventDispatcher.instance.AddEventListener("UpdateMap", OnUpdateMapHandle);//监听地图数据变化
     }
 
     private void OnDestroy()
@@ -25,6 +25,7 @@ public class MapView : MonoBehaviour {
         curPos = (transform as RectTransform).anchoredPosition;
         if(curPos!=lastPos)
         {
+            //发送视口坐标变化
             EventDispatcher.instance.DispatchEvent(new BaseEvent("Move",new Vector2(-curPos.x, curPos.y) ));
             lastPos = curPos;
         }
@@ -37,6 +38,7 @@ public class MapView : MonoBehaviour {
         Dictionary<Vector2Int, IMapItem> removeItems = evt.datas[1] as Dictionary<Vector2Int, IMapItem>;
         Dictionary<Vector2Int, IMapItem> addItems = evt.datas[2] as Dictionary<Vector2Int, IMapItem>;
 
+        //移除在视口中不可见的地图块
         foreach(Vector2Int key in removeItems.Keys)
         {
             if(dic.ContainsKey(key))
@@ -46,7 +48,7 @@ public class MapView : MonoBehaviour {
                 log += key;
             }
         }
-
+        //增加新的可见的地图块
         foreach(Vector2Int key in addItems.Keys)
         {
             MapItemView item = pool.getIdleTarget<MapItemView>();

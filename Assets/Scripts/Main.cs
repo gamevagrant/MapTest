@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Main : MonoBehaviour {
 
-    private Vector2 dispaySize = new Vector2(350, 200);//视口大小
-    private Vector2 itemSize = new Vector2(100, 100);//每张图片的大小
+    
     private Map map;
 
     private void Awake()
@@ -24,9 +23,7 @@ public class Main : MonoBehaviour {
             Debug.Log(json);
         }));
 
-
-
-        map = new Map(new Rect(Vector2.zero, dispaySize), itemSize);
+        map = new Map();
 
     }
 	

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//地图数据加载器
 public class MapItemLoader :MonoBehaviour, IDataLoader
 {
     private static MapItemLoader _instance;
@@ -41,6 +42,7 @@ public class MapItemLoader :MonoBehaviour, IDataLoader
             isLoading = true;
             MapServer.Instance.GetMapItemData(url, (ret,res) =>
             {
+                Debug.Log(string.Format("从服务器加载[{0}]数据",url));
                 if(ret)
                 {
                     string[] xy = url.Split('_');
@@ -55,6 +57,7 @@ public class MapItemLoader :MonoBehaviour, IDataLoader
                     };
 
                     onComplate(true, data);
+                    
                 }else
                 {
                     onComplate(false, null);

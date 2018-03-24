@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//地图节点
 public class MapItem :IMapItem
 {
     private const int UPDATE_INTERVAL = 200;//数据更新间隔200s
@@ -50,9 +51,10 @@ public class MapItem :IMapItem
         object obj = cacher.GetData(name);
         if(obj!=null)
         {
-            _data = obj as MapItemData;
-            if(GameUtils.Timestamps - _data.updateTimeStamp<UPDATE_INTERVAL)
+            MapItemData itemData = obj as MapItemData;
+            if(GameUtils.Timestamps - itemData.updateTimeStamp<UPDATE_INTERVAL)
             {
+                _data = itemData;
                 return;
             }
         }
@@ -62,7 +64,14 @@ public class MapItem :IMapItem
             if(ret)
             {
                 _data = res as MapItemData;
+                _data.isNull = false;
                 cacher.SaveData(name, _data);
+            }else
+            {
+                _data = new MapItemData();
+                _data.x = _index.x;
+                _data.y = _index.y;
+                _data.isNull = true;
             }
         });
 

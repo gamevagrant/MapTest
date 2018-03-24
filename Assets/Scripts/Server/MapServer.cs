@@ -53,7 +53,6 @@ public class MapServer:MonoBehaviour {
     public IEnumerator GetMapData(string json,Action<string> onGetData)
     {
         List<string> list = JsonMapper.ToObject<List<string>>(json);
-        Debug.Log(list);
         Dictionary<string, int> res = new Dictionary<string, int>();
         for(int i=0;i<list.Count;i++)
         {
@@ -82,9 +81,14 @@ public class MapServer:MonoBehaviour {
        
     }
 
+    /**
+    模拟服务器返回数据0.2秒延迟
+     */
     private IEnumerator SendData(int num,Action<bool,int> onGetData)
     {
-        yield return new WaitForSeconds(1);
+        yield return null;
+        yield return null;
+        yield return null;
         onGetData(true,num);
 
     }
